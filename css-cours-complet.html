@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apprends le CSS — Cours Complet Pas à Pas</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+<style>
+/* ===================================================
+   VARIABLES & RESET
+=================================================== */
+:root {
+  --bg:        #0e1117;
+  --surface:   #161b27;
+  --card:      #1d2333;
+  --border:    #2c3450;
+  --accent:    #6c8ff5;
+  --green:     #4cd6a0;
+  --orange:    #f5a623;
+  --pink:      #e86cad;
+  --yellow:    #f5d45c;
+  --text:      #dde4f8;
+  --muted:     #6b7799;
+  --code-bg:   #090c13;
+  --html-col:  #e36c4e;
+  --css-col:   #6c8ff5;
+  --prop-col:  #79c0ff;
+  --val-col:   #a5d6a7;
+  --sel-col:   #e86cad;
+  --comment:   #455275;
+  --tag-col:   #e36c4e;
+  --attr-col:  #f5a623;
+  --str-col:   #4cd6a0;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ===================================================
+   SCROLLBAR
+=================================================== */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* ===================================================
+   HEADER
+=================================================== */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.logo-text span { color: var(--green); }
+.header-steps {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.step-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'JetBrains Mono', monospace;
+}
+.step-dot:hover { border-color: var(--accent); color: var(--accent); }
+.step-dot.active { background: var(--accent); border-color: var(--accent); color: white; }
+.step-dot.done { background: var(--green); border-color: var(--green); color: #0a1a12; }
+
+/* ===================================================
+   LAYOUT PRINCIPAL
+=================================================== */
+.app-layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: calc(100vh - 60px);
+}
+
+/* ===================================================
+   SIDEBAR
+=================================================== */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem 0;
+  position: sticky;
+  top: 60px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+.sidebar-title {
+  font-size: 0.68rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0 1.25rem 0.75rem;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.6rem 1.25rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--muted);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+  position: relative;
+}
+.nav-item:hover { background: rgba(108,143,245,0.06); color: var(--text); }
+.nav-item.active {
+  background: rgba(108,143,245,0.1);
+  color: var(--accent);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+.nav-item.done { color: var(--green); }
+.nav-item.done::after {
+  content: '✓';
+  position: absolute;
+  right: 1rem;
+  font-size: 0.75rem;
+  color: var(--green);
+}
+.nav-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.68rem;
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+}
+.nav-sep {
+  height: 1px;
+  background: var(--border);
+  margin: 0.75rem 1.25rem;
+}
+.nav-section-label {
+  font-size: 0.65rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--orange);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0.75rem 1.25rem 0.25rem;
+}
+
+/* ===================================================
+   MAIN CONTENT
+=================================================== */
+.main-content {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ===================================================
+   STEP PAGE
+=================================================== */
+.step-page { display: none; }
+.step-page.visible { display: block; }
+
+/* ===================================================
+   STEP HERO BANNER
+=================================================== */
+.step-banner {
+  background: linear-gradient(135deg, var(--surface) 0%, var(--card) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.step-banner::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--pink), var(--green));
+}
+.step-number-big {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--orange);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.step-banner h1 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  margin-bottom: 0.6rem;
+  line-height: 1.2;
+}
+.step-banner p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  max-width: 700px;
+}
+.step-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 1rem;
+}
+.tag {
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-family: 'JetBrains Mono', monospace;
+  border: 1px solid;
+}
+.tag-html { color: var(--html-col); border-color: rgba(227,108,78,0.3); background: rgba(227,108,78,0.08); }
+.tag-css  { color: var(--css-col);  border-color: rgba(108,143,245,0.3); background: rgba(108,143,245,0.08); }
+.tag-prop { color: var(--green);    border-color: rgba(76,214,160,0.3);   background: rgba(76,214,160,0.08); }
+
+/* ===================================================
+   SPLIT EDITOR
+=================================================== */
+.split-workspace {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  height: calc(100vh - 60px - 170px);
+  min-height: 480px;
+}
+.panel-tabs {
+  grid-column: 1;
+  display: flex;
+  background: var(--code-bg);
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+.preview-tabs {
+  grid-column: 2;
+  display: flex;
+  background: var(--code-bg);
+  border-bottom: 1px solid var(--border);
+}
+.ptab {
+  padding: 8px 18px;
+  font-size: 0.78rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  user-select: none;
+}
+.ptab:hover { color: var(--text); }
+.ptab.active-html { color: var(--html-col); border-color: var(--html-col); }
+.ptab.active-css  { color: var(--css-col);  border-color: var(--css-col); }
+.ptab.active-prev { color: var(--green);    border-color: var(--green); }
+.ptab.active-expl { color: var(--orange);   border-color: var(--orange); }
+
+.code-panel {
+  background: var(--code-bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  display: none;
+}
+.code-panel.visible { display: block; }
+.code-panel pre {
+  padding: 1.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1.9;
+  white-space: pre;
+  min-height: 100%;
+}
+/* line numbers */
+.code-panel pre .ln {
+  color: var(--comment);
+  user-select: none;
+  margin-right: 1.5rem;
+  display: inline-block;
+  min-width: 2ch;
+  text-align: right;
+}
+
+/* syntax colors */
+.ht { color: var(--tag-col); }       /* html tag */
+.ha { color: var(--attr-col); }      /* html attr */
+.hv { color: var(--str-col); }       /* html value string */
+.hc { color: var(--comment); }       /* html comment */
+.cs { color: var(--sel-col); }       /* css selector */
+.cp { color: var(--prop-col); }      /* css property */
+.cv { color: var(--val-col); }       /* css value */
+.cc { color: var(--comment); }       /* css comment */
+.cb { color: var(--muted); }         /* css bracket */
+
+/* ===================================================
+   PREVIEW PANEL
+=================================================== */
+.preview-panel, .explain-panel {
+  display: none;
+  overflow-y: auto;
+  height: 100%;
+}
+.preview-panel.visible { display: block; }
+.explain-panel.visible { display: block; }
+.preview-frame-wrap {
+  width: 100%;
+  height: 100%;
+  background: white;
+}
+.preview-frame-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* ===================================================
+   EXPLAIN PANEL
+=================================================== */
+.explain-panel {
+  background: var(--surface);
+  padding: 1.5rem;
+}
+.explain-panel h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prop-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+}
+.prop-card-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: var(--prop-col);
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+.prop-card-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+.prop-card-example {
+  background: var(--code-bg);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--val-col);
+  border-left: 3px solid var(--css-col);
+}
+.explain-note {
+  background: rgba(245,166,35,0.08);
+  border: 1px solid rgba(245,166,35,0.25);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.83rem;
+  color: var(--orange);
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+.explain-note strong { color: var(--yellow); }
+.explain-tip {
+  background: rgba(76,214,160,0.07);
+  border: 1px solid rgba(76,214,160,0.2);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.83rem;
+  color: var(--green);
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+/* ===================================================
+   BOTTOM BAR
+=================================================== */
+.bottom-bar {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.step-info-txt {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+.nav-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+.btn {
+  padding: 7px 18px;
+  border-radius: 7px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.18s;
+}
+.btn-prev { background: var(--card); color: var(--muted); border: 1px solid var(--border); }
+.btn-prev:hover { color: var(--text); border-color: var(--muted); }
+.btn-next { background: var(--accent); color: white; }
+.btn-next:hover { background: #5a7ee8; transform: translateY(-1px); }
+
+/* ===================================================
+   RESPONSIVE
+=================================================== */
+@media (max-width: 900px) {
+  .app-layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .split-workspace { grid-template-columns: 1fr; height: auto; }
+  .panel-tabs, .preview-tabs { grid-column: 1; }
+  .code-panel { min-height: 280px; border-right: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===================================================
+     HEADER
+=================================================== -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-text">CSS<span>.</span>learn</div>
+    <div class="header-steps" id="header-dots"></div>
+  </div>
+</header>
+
+<!-- ===================================================
+     LAYOUT
+=================================================== -->
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Sommaire du cours</div>
+
+    <div class="nav-section-label">Fondations</div>
+    <div class="nav-item active" onclick="goTo(0)" id="nav0"><span class="nav-num">1</span>Structure HTML de base</div>
+    <div class="nav-item" onclick="goTo(1)" id="nav1"><span class="nav-num">2</span>Couleurs & Texte</div>
+    <div class="nav-item" onclick="goTo(2)" id="nav2"><span class="nav-num">3</span>Marges & Espacements</div>
+    <div class="nav-item" onclick="goTo(3)" id="nav3"><span class="nav-num">4</span>Bordures & Fond</div>
+
+    <div class="nav-sep"></div>
+    <div class="nav-section-label">Mise en page</div>
+    <div class="nav-item" onclick="goTo(4)" id="nav4"><span class="nav-num">5</span>Barre de navigation</div>
+    <div class="nav-item" onclick="goTo(5)" id="nav5"><span class="nav-num">6</span>Section Hero</div>
+    <div class="nav-item" onclick="goTo(6)" id="nav6"><span class="nav-num">7</span>Colonnes avec float</div>
+    <div class="nav-item" onclick="goTo(7)" id="nav7"><span class="nav-num">8</span>Pied de page</div>
+
+    <div class="nav-sep"></div>
+    <div class="nav-section-label">Finitions</div>
+    <div class="nav-item" onclick="goTo(8)" id="nav8"><span class="nav-num">9</span>Liens & États hover</div>
+    <div class="nav-item" onclick="goTo(9)" id="nav9"><span class="nav-num">10</span>Site complet assemblé</div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content" id="main-content"></main>
+</div>
+
+<script>
+/* ===========================================================
+   DONNÉES DES ÉTAPES
+=========================================================== */
+const steps = [
+
+/* ── STEP 0 ── Structure HTML de base */
+{
+  title: "Structure HTML de base",
+  subtitle: "On commence par les fondations : la structure d'une page HTML. Sans HTML solide, le CSS ne sert à rien !",
+  num: "ÉTAPE 1 / 10",
+  tags: ["html", "doctype", "head", "body"],
+  html: `<span class="hc">&lt;!-- Structure de base d'une page HTML --&gt;</span>
+<span class="ht">&lt;!DOCTYPE html&gt;</span>
+<span class="ht">&lt;html</span> <span class="ha">lang</span>=<span class="hv">"fr"</span><span class="ht">&gt;</span>
+
+  <span class="ht">&lt;head&gt;</span>
+    <span class="hc">&lt;!-- Encodage des caractères --&gt;</span>
+    <span class="ht">&lt;meta</span> <span class="ha">charset</span>=<span class="hv">"UTF-8"</span><span class="ht">&gt;</span>
+
+    <span class="hc">&lt;!-- Adapte la page aux mobiles --&gt;</span>
+    <span class="ht">&lt;meta</span> <span class="ha">name</span>=<span class="hv">"viewport"</span>
+          <span class="ha">content</span>=<span class="hv">"width=device-width, initial-scale=1.0"</span><span class="ht">&gt;</span>
+
+    <span class="hc">&lt;!-- Titre affiché dans l'onglet --&gt;</span>
+    <span class="ht">&lt;title&gt;</span>Mon premier site<span class="ht">&lt;/title&gt;</span>
+
+    <span class="hc">&lt;!-- Lien vers le fichier CSS --&gt;</span>
+    <span class="ht">&lt;link</span> <span class="ha">rel</span>=<span class="hv">"stylesheet"</span> <span class="ha">href</span>=<span class="hv">"style.css"</span><span class="ht">&gt;</span>
+  <span class="ht">&lt;/head&gt;</span>
+
+  <span class="ht">&lt;body&gt;</span>
+    <span class="hc">&lt;!-- Tout le contenu visible va ici --&gt;</span>
+    <span class="ht">&lt;h1&gt;</span>Bienvenue sur mon site !<span class="ht">&lt;/h1&gt;</span>
+    <span class="ht">&lt;p&gt;</span>Voici mon premier paragraphe.<span class="ht">&lt;/p&gt;</span>
+  <span class="ht">&lt;/body&gt;</span>
+
+<span class="ht">&lt;/html&gt;</span>`,
+  css: `<span class="cc">/* style.css — vide pour l'instant */</span>
+<span class="cc">/* On va remplir ce fichier étape par étape ! */</span>`,
+  preview: `<h1>Bienvenue sur mon site !</h1><p>Voici mon premier paragraphe.</p>`,
+  previewCSS: `body { font-family: Georgia, serif; padding: 20px; }`,
+  explain: [
+    { name: "<!DOCTYPE html>", desc: "Déclare que c'est un document HTML5. Toujours la première ligne d'une page web.", ex: "<!DOCTYPE html>" },
+    { name: "<html lang='fr'>", desc: "La balise racine qui contient tout. L'attribut lang aide les lecteurs d'écran et les moteurs de recherche.", ex: '<html lang="fr">' },
+    { name: "<head>", desc: "Contient les informations sur la page (titre, liens CSS, encodage). Ces infos ne s'affichent PAS dans le navigateur.", ex: "<head>\n  ...\n</head>" },
+    { name: "<meta charset='UTF-8'>", desc: "Définit l'encodage : permet d'afficher les accents, lettres spéciales (é, à, ç...). TOUJOURS inclure !", ex: '<meta charset="UTF-8">' },
+    { name: "<link rel='stylesheet'>", desc: "Connecte le fichier CSS à ta page HTML. Sans ça, ton CSS n'est pas chargé !", ex: '<link rel="stylesheet" href="style.css">' },
+    { name: "<body>", desc: "Contient tout le contenu visible : textes, images, boutons, etc. Tout ce que l'utilisateur voit est dans le body.", ex: "<body>\n  <h1>Mon titre</h1>\n</body>" },
+  ],
+  note: "💡 <strong>À retenir :</strong> HTML = le squelette (structure), CSS = la peau et les vêtements (style). Sans HTML, pas de CSS possible !",
+},
+
+/* ── STEP 1 ── Couleurs & Texte */
+{
+  title: "Couleurs & Typographie",
+  subtitle: "On stylise le texte : couleurs, polices, tailles, alignement. Les premières propriétés CSS à connaître.",
+  num: "ÉTAPE 2 / 10",
+  tags: ["color", "font-size", "font-family", "text-align", "font-weight"],
+  html: `<span class="ht">&lt;body&gt;</span>
+
+  <span class="ht">&lt;h1&gt;</span>Mon site web<span class="ht">&lt;/h1&gt;</span>
+
+  <span class="ht">&lt;h2&gt;</span>Sous-titre de section<span class="ht">&lt;/h2&gt;</span>
+
+  <span class="ht">&lt;p&gt;</span>Ceci est un paragraphe normal avec
+  du texte ordinaire.<span class="ht">&lt;/p&gt;</span>
+
+  <span class="ht">&lt;p</span> <span class="ha">class</span>=<span class="hv">"important"</span><span class="ht">&gt;</span>
+    Ce paragraphe est mis en valeur !
+  <span class="ht">&lt;/p&gt;</span>
+
+<span class="ht">&lt;/body&gt;</span>`,
+  css: `<span class="cc">/* ── Styles généraux du body ── */</span>
+<span class="cs">body</span> <span class="cb">{</span>
+  <span class="cp">font-family</span>: <span class="cv">Georgia, 'Times New Roman', serif</span>;
+  <span class="cp">font-size</span>: <span class="cv">16px</span>;
+  <span class="cp">color</span>: <span class="cv">#333333</span>;
+  <span class="cp">background-color</span>: <span class="cv">#f9f9f9</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Titre principal h1 ── */</span>
+<span class="cs">h1</span> <span class="cb">{</span>
+  <span class="cp">font-size</span>: <span class="cv">36px</span>;
+  <span class="cp">color</span>: <span class="cv">#1a237e</span>;
+  <span class="cp">text-align</span>: <span class="cv">center</span>;
+  <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+  <span class="cp">text-transform</span>: <span class="cv">uppercase</span>;
+  <span class="cp">letter-spacing</span>: <span class="cv">3px</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Sous-titre h2 ── */</span>
+<span class="cs">h2</span> <span class="cb">{</span>
+  <span class="cp">font-size</span>: <span class="cv">24px</span>;
+  <span class="cp">color</span>: <span class="cv">#283593</span>;
+  <span class="cp">font-style</span>: <span class="cv">italic</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Paragraphe normal ── */</span>
+<span class="cs">p</span> <span class="cb">{</span>
+  <span class="cp">line-height</span>: <span class="cv">1.7</span>;
+  <span class="cp">color</span>: <span class="cv">#555555</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Classe spéciale ── */</span>
+<span class="cs">.important</span> <span class="cb">{</span>
+  <span class="cp">color</span>: <span class="cv">#c62828</span>;
+  <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+  <span class="cp">font-size</span>: <span class="cv">18px</span>;
+<span class="cb">}</span>`,
+  preview: `<h1>Mon site web</h1><h2>Sous-titre de section</h2><p>Ceci est un paragraphe normal avec du texte ordinaire.</p><p class="important">Ce paragraphe est mis en valeur !</p>`,
+  previewCSS: `body{font-family:Georgia,'Times New Roman',serif;font-size:16px;color:#333;background:#f9f9f9;padding:20px;}h1{font-size:36px;color:#1a237e;text-align:center;font-weight:bold;text-transform:uppercase;letter-spacing:3px;}h2{font-size:24px;color:#283593;font-style:italic;}p{line-height:1.7;color:#555;}.important{color:#c62828;font-weight:bold;font-size:18px;}`,
+  explain: [
+    { name: "color", desc: "Définit la couleur du texte. On peut utiliser un nom (red, blue), un code hexadécimal (#FF0000) ou rgb(255,0,0).", ex: "color: #1a237e;\ncolor: tomato;\ncolor: rgb(26, 35, 126);" },
+    { name: "font-family", desc: "Choisit la police d'écriture. Toujours donner plusieurs polices de secours séparées par des virgules.", ex: "font-family: Georgia, 'Times New Roman', serif;" },
+    { name: "font-size", desc: "Taille du texte en pixels (px). La taille par défaut du navigateur est 16px.", ex: "font-size: 16px; /* normal */\nfont-size: 36px; /* grand */" },
+    { name: "font-weight", desc: "Épaisseur du texte. bold = gras, normal = normal. On peut aussi utiliser des valeurs numériques (100 à 900).", ex: "font-weight: bold;\nfont-weight: normal;\nfont-weight: 700;" },
+    { name: "text-align", desc: "Alignement horizontal du texte. left (gauche), center (centré), right (droite), justify (justifié).", ex: "text-align: center;\ntext-align: left;" },
+    { name: "line-height", desc: "Hauteur d'une ligne de texte. 1.5 à 1.8 est idéal pour la lisibilité.", ex: "line-height: 1.7;" },
+    { name: "text-transform", desc: "Modifie la casse du texte sans changer le HTML.", ex: "text-transform: uppercase; /* TOUT EN MAJUSCULES */\ntext-transform: lowercase;" },
+    { name: "letter-spacing", desc: "Espace entre les lettres. Utile pour les titres en majuscules.", ex: "letter-spacing: 3px;" },
+  ],
+  note: "💡 <strong>Astuce couleurs :</strong> Les codes hexadécimaux (#FF5733) commencent par # suivi de 6 chiffres/lettres. Des sites comme colorhunt.co donnent de belles palettes !",
+},
+
+/* ── STEP 2 ── Margin & Padding */
+{
+  title: "Marges & Espacements",
+  subtitle: "Le modèle de boîte CSS (box model) : margin, padding, width. C'est l'une des notions les plus importantes du CSS !",
+  num: "ÉTAPE 3 / 10",
+  tags: ["margin", "padding", "width", "height", "box-model"],
+  html: `<span class="ht">&lt;body&gt;</span>
+
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"boite-demo"</span><span class="ht">&gt;</span>
+    <span class="ht">&lt;p&gt;</span>Je suis dans une boîte CSS.<span class="ht">&lt;/p&gt;</span>
+  <span class="ht">&lt;/div&gt;</span>
+
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"boite-large"</span><span class="ht">&gt;</span>
+    <span class="ht">&lt;p&gt;</span>Boîte avec largeur fixe et centrée.<span class="ht">&lt;/p&gt;</span>
+  <span class="ht">&lt;/div&gt;</span>
+
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"boite-auto"</span><span class="ht">&gt;</span>
+    <span class="ht">&lt;p&gt;</span>Centrage avec margin: auto.<span class="ht">&lt;/p&gt;</span>
+  <span class="ht">&lt;/div&gt;</span>
+
+<span class="ht">&lt;/body&gt;</span>`,
+  css: `<span class="cs">body</span> <span class="cb">{</span>
+  <span class="cp">font-family</span>: <span class="cv">Arial, sans-serif</span>;
+  <span class="cp">background-color</span>: <span class="cv">#eceff1</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Boîte de démonstration ── */</span>
+<span class="cs">.boite-demo</span> <span class="cb">{</span>
+  <span class="cc">/* Espace INTÉRIEUR (entre le bord et le contenu) */</span>
+  <span class="cp">padding</span>: <span class="cv">20px</span>;
+
+  <span class="cc">/* Espace EXTÉRIEUR (autour de la boîte) */</span>
+  <span class="cp">margin</span>: <span class="cv">30px</span>;
+
+  <span class="cp">background-color</span>: <span class="cv">#ffffff</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Largeur fixe ── */</span>
+<span class="cs">.boite-large</span> <span class="cb">{</span>
+  <span class="cp">width</span>: <span class="cv">400px</span>;
+  <span class="cp">padding</span>: <span class="cv">15px 25px</span>; <span class="cc">/* haut/bas gauche/droite */</span>
+
+  <span class="cc">/* Espace différent par côté */</span>
+  <span class="cp">margin-top</span>: <span class="cv">10px</span>;
+  <span class="cp">margin-bottom</span>: <span class="cv">20px</span>;
+  <span class="cp">margin-left</span>: <span class="cv">30px</span>;
+
+  <span class="cp">background-color</span>: <span class="cv">#e3f2fd</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Centrage avec margin auto ── */</span>
+<span class="cs">.boite-auto</span> <span class="cb">{</span>
+  <span class="cp">width</span>: <span class="cv">300px</span>;
+  <span class="cp">padding</span>: <span class="cv">20px</span>;
+
+  <span class="cc">/* margin: auto centre horizontalement ! */</span>
+  <span class="cp">margin</span>: <span class="cv">20px auto</span>;
+
+  <span class="cp">background-color</span>: <span class="cv">#f3e5f5</span>;
+<span class="cb">}</span>`,
+  preview: `<div class="boite-demo"><p>Je suis dans une boîte CSS.</p></div><div class="boite-large"><p>Boîte avec largeur fixe et centrée.</p></div><div class="boite-auto"><p>Centrage avec margin: auto.</p></div>`,
+  previewCSS: `body{font-family:Arial,sans-serif;background:#eceff1;}.boite-demo{padding:20px;margin:30px;background:#fff;}.boite-large{width:400px;padding:15px 25px;margin-top:10px;margin-bottom:20px;margin-left:30px;background:#e3f2fd;}.boite-auto{width:300px;padding:20px;margin:20px auto;background:#f3e5f5;}`,
+  explain: [
+    { name: "padding", desc: "Espace INTÉRIEUR entre le contenu et la bordure de l'élément. Augmente la taille visible de la boîte.", ex: "padding: 20px;           /* 4 côtés égaux */\npadding: 10px 20px;      /* haut/bas  gauche/droite */\npadding-top: 10px;       /* un seul côté */" },
+    { name: "margin", desc: "Espace EXTÉRIEUR autour de l'élément. Crée de l'espace entre les éléments voisins.", ex: "margin: 20px;            /* 4 côtés */\nmargin: 10px auto;       /* centrage horizontal */\nmargin-bottom: 30px;     /* un seul côté */" },
+    { name: "width / height", desc: "Définissent la largeur et la hauteur de l'élément. Par défaut les block s'étendent à 100% du parent.", ex: "width: 400px;     /* largeur fixe */\nwidth: 80%;       /* pourcentage du parent */\nheight: 200px;" },
+    { name: "margin: auto", desc: "La technique classique pour centrer horizontalement un bloc. Il faut obligatoirement que l'élément ait une largeur (width) définie !", ex: "width: 600px;\nmargin: 0 auto; /* centré !" },
+  ],
+  note: "🎯 <strong>Le box model :</strong> Contenu + Padding + Border + Margin. Tout élément HTML est une boîte rectangulaire avec ces 4 couches !",
+  tip: "✅ <strong>Raccourci padding/margin :</strong> padding: 10px 20px 15px 5px = haut | droite | bas | gauche (sens horaire).",
+},
+
+/* ── STEP 3 ── Bordures & Fond */
+{
+  title: "Bordures & Arrière-plans",
+  subtitle: "Ajouter des bordures, des coins arrondis, des ombres et des couleurs de fond. On commence à vraiment styliser !",
+  num: "ÉTAPE 4 / 10",
+  tags: ["border", "border-radius", "background-color", "box-shadow"],
+  html: `<span class="ht">&lt;body&gt;</span>
+
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"carte"</span><span class="ht">&gt;</span>
+    <span class="ht">&lt;h3&gt;</span>Carte simple<span class="ht">&lt;/h3&gt;</span>
+    <span class="ht">&lt;p&gt;</span>Avec bordure et coins arrondis.<span class="ht">&lt;/p&gt;</span>
+  <span class="ht">&lt;/div&gt;</span>
+
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"carte-ombre"</span><span class="ht">&gt;</span>
+    <span class="ht">&lt;h3&gt;</span>Carte avec ombre<span class="ht">&lt;/h3&gt;</span>
+    <span class="ht">&lt;p&gt;</span>L'ombre donne du relief à la carte.<span class="ht">&lt;/p&gt;</span>
+  <span class="ht">&lt;/div&gt;</span>
+
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"bouton-demo"</span><span class="ht">&gt;</span>
+    Cliquez ici
+  <span class="ht">&lt;/div&gt;</span>
+
+<span class="ht">&lt;/body&gt;</span>`,
+  css: `<span class="cs">body</span> <span class="cb">{</span>
+  <span class="cp">font-family</span>: <span class="cv">Arial, sans-serif</span>;
+  <span class="cp">background-color</span>: <span class="cv">#f0f4f8</span>;
+  <span class="cp">padding</span>: <span class="cv">20px</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Carte simple ── */</span>
+<span class="cs">.carte</span> <span class="cb">{</span>
+  <span class="cp">width</span>: <span class="cv">300px</span>;
+  <span class="cp">padding</span>: <span class="cv">20px</span>;
+  <span class="cp">margin-bottom</span>: <span class="cv">20px</span>;
+  <span class="cp">background-color</span>: <span class="cv">#ffffff</span>;
+
+  <span class="cc">/* épaisseur  style    couleur */</span>
+  <span class="cp">border</span>: <span class="cv">2px solid #90caf9</span>;
+
+  <span class="cc">/* Coins arrondis */</span>
+  <span class="cp">border-radius</span>: <span class="cv">10px</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Carte avec ombre ── */</span>
+<span class="cs">.carte-ombre</span> <span class="cb">{</span>
+  <span class="cp">width</span>: <span class="cv">300px</span>;
+  <span class="cp">padding</span>: <span class="cv">20px</span>;
+  <span class="cp">margin-bottom</span>: <span class="cv">20px</span>;
+  <span class="cp">background-color</span>: <span class="cv">#fff9c4</span>;
+  <span class="cp">border-radius</span>: <span class="cv">12px</span>;
+
+  <span class="cc">/* x  y  flou   couleur */</span>
+  <span class="cp">box-shadow</span>: <span class="cv">0 4px 15px rgba(0,0,0,0.12)</span>;
+
+  <span class="cc">/* Bordure d'un seul côté */</span>
+  <span class="cp">border-left</span>: <span class="cv">5px solid #f9a825</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Bouton stylisé ── */</span>
+<span class="cs">.bouton-demo</span> <span class="cb">{</span>
+  <span class="cp">display</span>: <span class="cv">inline-block</span>;
+  <span class="cp">padding</span>: <span class="cv">12px 28px</span>;
+  <span class="cp">background-color</span>: <span class="cv">#1565c0</span>;
+  <span class="cp">color</span>: <span class="cv">white</span>;
+  <span class="cp">border-radius</span>: <span class="cv">6px</span>;
+  <span class="cp">border</span>: <span class="cv">none</span>;
+  <span class="cp">font-size</span>: <span class="cv">16px</span>;
+  <span class="cp">cursor</span>: <span class="cv">pointer</span>;
+  <span class="cp">box-shadow</span>: <span class="cv">0 2px 8px rgba(21,101,192,0.4)</span>;
+<span class="cb">}</span>`,
+  preview: `<div class="carte"><h3>Carte simple</h3><p>Avec bordure et coins arrondis.</p></div><div class="carte-ombre"><h3>Carte avec ombre</h3><p>L'ombre donne du relief à la carte.</p></div><div class="bouton-demo">Cliquez ici</div>`,
+  previewCSS: `body{font-family:Arial,sans-serif;background:#f0f4f8;padding:20px;}.carte{width:300px;padding:20px;margin-bottom:20px;background:#fff;border:2px solid #90caf9;border-radius:10px;}.carte-ombre{width:300px;padding:20px;margin-bottom:20px;background:#fff9c4;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.12);border-left:5px solid #f9a825;}.bouton-demo{display:inline-block;padding:12px 28px;background:#1565c0;color:white;border-radius:6px;border:none;font-size:16px;cursor:pointer;box-shadow:0 2px 8px rgba(21,101,192,0.4);}`,
+  explain: [
+    { name: "border", desc: "Raccourci pour définir la bordure : épaisseur, style et couleur en une seule ligne.", ex: "border: 2px solid #90caf9;\nborder: 1px dashed red;\nborder: 3px dotted green;" },
+    { name: "border-radius", desc: "Arrondit les coins de l'élément. 50% crée un cercle parfait si l'élément est carré.", ex: "border-radius: 10px;   /* coins arrondis */\nborder-radius: 50%;    /* cercle parfait */" },
+    { name: "border-left / right / top / bottom", desc: "Applique une bordure seulement sur un côté. Très utilisé pour les effets décoratifs.", ex: "border-left: 5px solid orange;\nborder-bottom: 2px solid #333;" },
+    { name: "box-shadow", desc: "Crée une ombre autour de l'élément. Paramètres : décalage-x, décalage-y, flou, couleur.", ex: "box-shadow: 0 4px 15px rgba(0,0,0,0.12);\n/* 0px droite, 4px bas, 15px flou */" },
+    { name: "background-color", desc: "Couleur de fond de l'élément. Accepte les mêmes valeurs que color.", ex: "background-color: #ffffff;\nbackground-color: rgba(255,255,255,0.9);" },
+  ],
+  note: "💡 <strong>rgba()</strong> = rouge, vert, bleu, opacité (0=transparent, 1=opaque). Parfait pour les ombres : rgba(0,0,0,0.15) = noir à 15% d'opacité.",
+},
+
+/* ── STEP 4 ── Navbar */
+{
+  title: "Barre de navigation",
+  subtitle: "On crée la navbar : logo à gauche, liens à droite. Technique classique avec float — sans Flexbox !",
+  num: "ÉTAPE 5 / 10",
+  tags: ["float", "overflow:hidden", "display:inline-block", "list-style"],
+  html: `<span class="ht">&lt;nav</span> <span class="ha">class</span>=<span class="hv">"navbar"</span><span class="ht">&gt;</span>
+
+  <span class="hc">&lt;!-- Logo à gauche --&gt;</span>
+  <span class="ht">&lt;div</span> <span class="ha">id</span>=<span class="hv">"logo"</span><span class="ht">&gt;</span>MonSite<span class="ht">&lt;/div&gt;</span>
+
+  <span class="hc">&lt;!-- Liens à droite --&gt;</span>
+  <span class="ht">&lt;ul</span> <span class="ha">id</span>=<span class="hv">"nav-liens"</span><span class="ht">&gt;</span>
+    <span class="ht">&lt;li&gt;&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span><span class="ht">&gt;</span>Accueil<span class="ht">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="ht">&lt;li&gt;&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span><span class="ht">&gt;</span>À propos<span class="ht">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="ht">&lt;li&gt;&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span><span class="ht">&gt;</span>Services<span class="ht">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="ht">&lt;li&gt;&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span><span class="ht">&gt;</span>Contact<span class="ht">&lt;/a&gt;&lt;/li&gt;</span>
+  <span class="ht">&lt;/ul&gt;</span>
+
+<span class="ht">&lt;/nav&gt;</span>`,
+  css: `<span class="cc">/* ── La barre de navigation ── */</span>
+<span class="cs">.navbar</span> <span class="cb">{</span>
+  <span class="cp">background-color</span>: <span class="cv">#1a237e</span>;
+  <span class="cp">padding</span>: <span class="cv">0 30px</span>;
+  <span class="cp">height</span>: <span class="cv">65px</span>;
+
+  <span class="cc">/* INDISPENSABLE avec float ! */</span>
+  <span class="cc">/* Empêche la navbar de s'effondrer */</span>
+  <span class="cp">overflow</span>: <span class="cv">hidden</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Logo (flotte à gauche) ── */</span>
+<span class="cs">#logo</span> <span class="cb">{</span>
+  <span class="cp">float</span>: <span class="cv">left</span>;
+  <span class="cp">color</span>: <span class="cv">#ffffff</span>;
+  <span class="cp">font-size</span>: <span class="cv">22px</span>;
+  <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+  <span class="cc">/* centre verticalement dans 65px */</span>
+  <span class="cp">line-height</span>: <span class="cv">65px</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Liste des liens ── */</span>
+<span class="cs">#nav-liens</span> <span class="cb">{</span>
+  <span class="cp">float</span>: <span class="cv">right</span>;
+  <span class="cc">/* Enlève les puces de liste */</span>
+  <span class="cp">list-style</span>: <span class="cv">none</span>;
+  <span class="cc">/* Enlève le retrait par défaut */</span>
+  <span class="cp">padding</span>: <span class="cv">0</span>;
+  <span class="cp">margin</span>: <span class="cv">0</span>;
+  <span class="cc">/* centre verticalement */</span>
+  <span class="cp">line-height</span>: <span class="cv">65px</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Chaque élément de liste ── */</span>
+<span class="cs">#nav-liens li</span> <span class="cb">{</span>
+  <span class="cc">/* Met les &lt;li&gt; côte à côte */</span>
+  <span class="cp">display</span>: <span class="cv">inline-block</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Les liens ── */</span>
+<span class="cs">#nav-liens a</span> <span class="cb">{</span>
+  <span class="cp">color</span>: <span class="cv">#b3c5ff</span>;
+  <span class="cp">text-decoration</span>: <span class="cv">none</span>;
+  <span class="cp">padding</span>: <span class="cv">0 15px</span>;
+  <span class="cp">font-size</span>: <span class="cv">15px</span>;
+  <span class="cp">font-family</span>: <span class="cv">Arial, sans-serif</span>;
+<span class="cb">}</span>`,
+  preview: `<nav class="navbar"><div id="logo">MonSite</div><ul id="nav-liens"><li><a href="#">Accueil</a></li><li><a href="#">À propos</a></li><li><a href="#">Services</a></li><li><a href="#">Contact</a></li></ul></nav>`,
+  previewCSS: `.navbar{background-color:#1a237e;padding:0 30px;height:65px;overflow:hidden;}#logo{float:left;color:#fff;font-size:22px;font-weight:bold;line-height:65px;}#nav-liens{float:right;list-style:none;padding:0;margin:0;line-height:65px;}#nav-liens li{display:inline-block;}#nav-liens a{color:#b3c5ff;text-decoration:none;padding:0 15px;font-size:15px;font-family:Arial,sans-serif;}`,
+  explain: [
+    { name: "float: left / right", desc: "Fait 'flotter' un élément à gauche ou à droite. Les autres éléments se placent autour de lui. C'est la technique classique avant Flexbox.", ex: "float: left;   /* colle à gauche */\nfloat: right;  /* colle à droite */" },
+    { name: "overflow: hidden", desc: "Sur le parent d'éléments flottants, empêche le conteneur de s'effondrer. INDISPENSABLE avec float !", ex: ".navbar {\n  overflow: hidden; /* important ! */\n}" },
+    { name: "list-style: none", desc: "Supprime les puces (•) d'une liste <ul>. Essentiel pour transformer une liste en navigation.", ex: "ul {\n  list-style: none;\n  padding: 0;\n  margin: 0;\n}" },
+    { name: "display: inline-block", desc: "Transforme des éléments block (qui prennent toute la ligne) en éléments côte à côte, tout en conservant les marges/paddings.", ex: "li { display: inline-block; }" },
+    { name: "line-height: 65px", desc: "Astuce de centrage vertical classique : si la ligne a la même hauteur que le conteneur, le texte est parfaitement centré.", ex: ".navbar { height: 65px; }\n#logo { line-height: 65px; }" },
+    { name: "text-decoration: none", desc: "Supprime le soulignement par défaut des liens <a>. Presque toujours utilisé pour les navigations.", ex: "a { text-decoration: none; }" },
+  ],
+  note: "⚠️ <strong>Attention :</strong> Sans overflow:hidden sur la navbar, les éléments flottants débordent et la barre s'effondre à hauteur 0 !",
+  tip: "✅ <strong>Mémo float :</strong> Logo → float:left | Liens → float:right | Parent → overflow:hidden. Ces 3 règles ensemble font la navbar !",
+},
+
+/* ── STEP 5 ── Hero Section */
+{
+  title: "Section Hero avec image de fond",
+  subtitle: "Une grande section d'accroche avec image en arrière-plan, titre, paragraphe et bouton superposés.",
+  num: "ÉTAPE 6 / 10",
+  tags: ["background-image", "background-size:cover", "position:relative", "padding"],
+  html: `<span class="hc">&lt;!-- La section hero --&gt;</span>
+<span class="ht">&lt;section</span> <span class="ha">class</span>=<span class="hv">"hero"</span><span class="ht">&gt;</span>
+
+  <span class="hc">&lt;!-- Contenu centré à l'intérieur --&gt;</span>
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"hero-contenu"</span><span class="ht">&gt;</span>
+
+    <span class="ht">&lt;h1&gt;</span>Bienvenue sur MonSite<span class="ht">&lt;/h1&gt;</span>
+
+    <span class="ht">&lt;p&gt;</span>
+      Nous créons des sites web modernes
+      et accessibles pour tous.
+    <span class="ht">&lt;/p&gt;</span>
+
+    <span class="ht">&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span> <span class="ha">class</span>=<span class="hv">"btn-hero"</span><span class="ht">&gt;</span>
+      Découvrir
+    <span class="ht">&lt;/a&gt;</span>
+
+  <span class="ht">&lt;/div&gt;</span>
+<span class="ht">&lt;/section&gt;</span>`,
+  css: `<span class="cc">/* ── Section Hero ── */</span>
+<span class="cs">.hero</span> <span class="cb">{</span>
+  <span class="cc">/* Hauteur de la section */</span>
+  <span class="cp">height</span>: <span class="cv">400px</span>;
+
+  <span class="cc">/* Image de fond */</span>
+  <span class="cp">background-image</span>: <span class="cv">url('https://picsum.photos/1200/400?random=10')</span>;
+
+  <span class="cc">/* Couvre toute la section */</span>
+  <span class="cp">background-size</span>: <span class="cv">cover</span>;
+
+  <span class="cc">/* Centre l'image */</span>
+  <span class="cp">background-position</span>: <span class="cv">center</span>;
+
+  <span class="cc">/* Empêche l'image de se répéter */</span>
+  <span class="cp">background-repeat</span>: <span class="cv">no-repeat</span>;
+
+  <span class="cc">/* Nécessaire pour l'overlay (plus bas) */</span>
+  <span class="cp">position</span>: <span class="cv">relative</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Voile sombre sur l'image ── */</span>
+<span class="cs">.hero::before</span> <span class="cb">{</span>
+  <span class="cp">content</span>: <span class="cv">''</span>;
+  <span class="cp">position</span>: <span class="cv">absolute</span>;
+  <span class="cp">top</span>: <span class="cv">0</span>; <span class="cp">left</span>: <span class="cv">0</span>;
+  <span class="cp">width</span>: <span class="cv">100%</span>; <span class="cp">height</span>: <span class="cv">100%</span>;
+  <span class="cp">background-color</span>: <span class="cv">rgba(0,0,0,0.45)</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Contenu du hero ── */</span>
+<span class="cs">.hero-contenu</span> <span class="cb">{</span>
+  <span class="cp">position</span>: <span class="cv">relative</span>; <span class="cc">/* passe au-dessus du voile */</span>
+  <span class="cp">text-align</span>: <span class="cv">center</span>;
+  <span class="cp">padding-top</span>: <span class="cv">100px</span>;
+  <span class="cp">color</span>: <span class="cv">white</span>;
+<span class="cb">}</span>
+
+<span class="cs">.hero-contenu h1</span> <span class="cb">{</span>
+  <span class="cp">font-size</span>: <span class="cv">42px</span>;
+  <span class="cp">font-family</span>: <span class="cv">Georgia, serif</span>;
+  <span class="cp">margin-bottom</span>: <span class="cv">15px</span>;
+  <span class="cp">text-shadow</span>: <span class="cv">0 2px 10px rgba(0,0,0,0.5)</span>;
+<span class="cb">}</span>
+
+<span class="cs">.hero-contenu p</span> <span class="cb">{</span>
+  <span class="cp">font-size</span>: <span class="cv">18px</span>;
+  <span class="cp">margin-bottom</span>: <span class="cv">30px</span>;
+  <span class="cp">opacity</span>: <span class="cv">0.9</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Bouton d'appel à l'action ── */</span>
+<span class="cs">.btn-hero</span> <span class="cb">{</span>
+  <span class="cp">display</span>: <span class="cv">inline-block</span>;
+  <span class="cp">padding</span>: <span class="cv">14px 38px</span>;
+  <span class="cp">background-color</span>: <span class="cv">#ff6f00</span>;
+  <span class="cp">color</span>: <span class="cv">white</span>;
+  <span class="cp">text-decoration</span>: <span class="cv">none</span>;
+  <span class="cp">font-size</span>: <span class="cv">17px</span>;
+  <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+  <span class="cp">border-radius</span>: <span class="cv">5px</span>;
+<span class="cb">}</span>`,
+  preview: `<section class="hero"><div class="hero-contenu"><h1>Bienvenue sur MonSite</h1><p>Nous créons des sites web modernes et accessibles pour tous.</p><a href="#" class="btn-hero">Découvrir</a></div></section>`,
+  previewCSS: `.hero{height:400px;background-image:url('https://picsum.photos/1200/400?random=10');background-size:cover;background-position:center;background-repeat:no-repeat;position:relative;}.hero::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.45);}.hero-contenu{position:relative;text-align:center;padding-top:100px;color:white;}.hero-contenu h1{font-size:42px;font-family:Georgia,serif;margin-bottom:15px;text-shadow:0 2px 10px rgba(0,0,0,0.5);}.hero-contenu p{font-size:18px;margin-bottom:30px;opacity:0.9;}.btn-hero{display:inline-block;padding:14px 38px;background-color:#ff6f00;color:white;text-decoration:none;font-size:17px;font-weight:bold;border-radius:5px;}`,
+  explain: [
+    { name: "background-image", desc: "Définit une image en arrière-plan. On fournit l'URL entre url(' ').", ex: "background-image: url('photo.jpg');\nbackground-image: url('https://...');" },
+    { name: "background-size: cover", desc: "L'image couvre TOUT l'espace disponible, sans déformation ni espace blanc. C'est la valeur à utiliser pour les sections hero.", ex: "background-size: cover;\nbackground-size: contain; /* garde tout visible */" },
+    { name: "background-position: center", desc: "Centre l'image dans le conteneur. Utile quand l'image est rognée par background-size:cover.", ex: "background-position: center;\nbackground-position: top center;" },
+    { name: "position: relative / absolute", desc: "relative = l'élément reste à sa place mais permet de positionner des enfants absolute. absolute = sorti du flux, positionné par rapport au parent relative.", ex: ".parent { position: relative; }\n.enfant { position: absolute; top: 0; left: 0; }" },
+    { name: "::before (pseudo-élément)", desc: "Crée un élément virtuel AVANT le contenu de l'élément, sans HTML. Utilisé ici pour créer un voile sombre sur l'image.", ex: ".hero::before {\n  content: '';  /* obligatoire ! */\n  position: absolute;\n  background: rgba(0,0,0,0.4);\n}" },
+    { name: "text-shadow", desc: "Ajoute une ombre au texte. Indispensable pour la lisibilité sur une image de fond.", ex: "text-shadow: 0 2px 10px rgba(0,0,0,0.5);" },
+  ],
+  note: "💡 <strong>Voile sombre :</strong> Le ::before avec rgba(0,0,0,0.45) crée un filtre sombre sur l'image. Le contenu doit avoir position:relative pour passer au-dessus !",
+  tip: "✅ Pour centrer le bouton dans la section, on utilise text-align:center sur le parent. Le bouton doit avoir display:inline-block.",
+},
+
+/* ── STEP 6 ── Colonnes float */
+{
+  title: "Colonnes avec float",
+  subtitle: "Comment créer plusieurs colonnes côte à côte sans Flexbox, grâce à float et clearfix.",
+  num: "ÉTAPE 7 / 10",
+  tags: ["float", "width:%", "clearfix", "display:inline-block"],
+  html: `<span class="hc">&lt;!-- Conteneur des colonnes --&gt;</span>
+<span class="ht">&lt;section</span> <span class="ha">class</span>=<span class="hv">"services"</span><span class="ht">&gt;</span>
+  <span class="ht">&lt;h2</span> <span class="ha">class</span>=<span class="hv">"titre-section"</span><span class="ht">&gt;</span>Nos services<span class="ht">&lt;/h2&gt;</span>
+
+  <span class="hc">&lt;!-- Rangée de 3 colonnes --&gt;</span>
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"rangee"</span><span class="ht">&gt;</span>
+
+    <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"colonne"</span><span class="ht">&gt;</span>
+      <span class="ht">&lt;h3&gt;</span>🎨 Design<span class="ht">&lt;/h3&gt;</span>
+      <span class="ht">&lt;p&gt;</span>Nous créons des interfaces
+      belles et modernes.<span class="ht">&lt;/p&gt;</span>
+    <span class="ht">&lt;/div&gt;</span>
+
+    <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"colonne"</span><span class="ht">&gt;</span>
+      <span class="ht">&lt;h3&gt;</span>⚙️ Développement<span class="ht">&lt;/h3&gt;</span>
+      <span class="ht">&lt;p&gt;</span>Code propre, rapide
+      et bien structuré.<span class="ht">&lt;/p&gt;</span>
+    <span class="ht">&lt;/div&gt;</span>
+
+    <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"colonne"</span><span class="ht">&gt;</span>
+      <span class="ht">&lt;h3&gt;</span>📈 Marketing<span class="ht">&lt;/h3&gt;</span>
+      <span class="ht">&lt;p&gt;</span>Stratégies pour faire
+      grandir votre activité.<span class="ht">&lt;/p&gt;</span>
+    <span class="ht">&lt;/div&gt;</span>
+
+  <span class="ht">&lt;/div&gt;</span><span class="hc">&lt;!-- fin .rangee --&gt;</span>
+<span class="ht">&lt;/section&gt;</span>`,
+  css: `<span class="cs">body</span> <span class="cb">{</span> <span class="cp">font-family</span>: <span class="cv">Arial, sans-serif</span>; <span class="cp">margin</span>: <span class="cv">0</span>; <span class="cb">}</span>
+
+<span class="cs">.services</span> <span class="cb">{</span>
+  <span class="cp">padding</span>: <span class="cv">40px 30px</span>;
+  <span class="cp">background-color</span>: <span class="cv">#f5f5f5</span>;
+<span class="cb">}</span>
+
+<span class="cs">.titre-section</span> <span class="cb">{</span>
+  <span class="cp">text-align</span>: <span class="cv">center</span>;
+  <span class="cp">margin-bottom</span>: <span class="cv">30px</span>;
+  <span class="cp">color</span>: <span class="cv">#1a237e</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── La rangée contient les colonnes ── */</span>
+<span class="cs">.rangee</span> <span class="cb">{</span>
+  <span class="cc">/* Empêche l'effondrement dû aux floats */</span>
+  <span class="cp">overflow</span>: <span class="cv">hidden</span>;
+  <span class="cc">/* max-width + centrage */</span>
+  <span class="cp">max-width</span>: <span class="cv">900px</span>;
+  <span class="cp">margin</span>: <span class="cv">0 auto</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Chaque colonne ── */</span>
+<span class="cs">.colonne</span> <span class="cb">{</span>
+  <span class="cc">/* 3 colonnes = 33.33% chacune */</span>
+  <span class="cp">width</span>: <span class="cv">33.33%</span>;
+
+  <span class="cc">/* Float pour les mettre côte à côte */</span>
+  <span class="cp">float</span>: <span class="cv">left</span>;
+
+  <span class="cc">/* Espacement intérieur */</span>
+  <span class="cp">padding</span>: <span class="cv">25px 20px</span>;
+
+  <span class="cc">/* box-sizing pour que padding
+     ne dépasse pas les 33.33% */</span>
+  <span class="cp">box-sizing</span>: <span class="cv">border-box</span>;
+
+  <span class="cp">background-color</span>: <span class="cv">#ffffff</span>;
+  <span class="cp">border</span>: <span class="cv">1px solid #e0e0e0</span>;
+  <span class="cp">text-align</span>: <span class="cv">center</span>;
+<span class="cb">}</span>
+
+<span class="cs">.colonne h3</span> <span class="cb">{</span>
+  <span class="cp">font-size</span>: <span class="cv">20px</span>;
+  <span class="cp">margin-bottom</span>: <span class="cv">10px</span>;
+  <span class="cp">color</span>: <span class="cv">#283593</span>;
+<span class="cb">}</span>
+
+<span class="cs">.colonne p</span> <span class="cb">{</span>
+  <span class="cp">color</span>: <span class="cv">#666</span>;
+  <span class="cp">line-height</span>: <span class="cv">1.6</span>;
+<span class="cb">}</span>`,
+  preview: `<section class="services"><h2 class="titre-section">Nos services</h2><div class="rangee"><div class="colonne"><h3>🎨 Design</h3><p>Nous créons des interfaces belles et modernes.</p></div><div class="colonne"><h3>⚙️ Développement</h3><p>Code propre, rapide et bien structuré.</p></div><div class="colonne"><h3>📈 Marketing</h3><p>Stratégies pour faire grandir votre activité.</p></div></div></section>`,
+  previewCSS: `body{font-family:Arial,sans-serif;margin:0;}.services{padding:40px 30px;background:#f5f5f5;}.titre-section{text-align:center;margin-bottom:30px;color:#1a237e;}.rangee{overflow:hidden;max-width:900px;margin:0 auto;}.colonne{width:33.33%;float:left;padding:25px 20px;box-sizing:border-box;background:#fff;border:1px solid #e0e0e0;text-align:center;}.colonne h3{font-size:20px;margin-bottom:10px;color:#283593;}.colonne p{color:#666;line-height:1.6;}`,
+  explain: [
+    { name: "width: 33.33%", desc: "3 colonnes = 100% / 3 = 33.33% chacune. Pour 2 colonnes : 50%, pour 4 colonnes : 25%.", ex: "/* 2 colonnes */\n.col { width: 50%; }\n/* 3 colonnes */\n.col { width: 33.33%; }\n/* 4 colonnes */\n.col { width: 25%; }" },
+    { name: "float: left", desc: "Toutes les colonnes flottent à gauche : elles se mettent naturellement côte à côte.", ex: ".colonne {\n  float: left;\n  width: 33.33%;\n}" },
+    { name: "box-sizing: border-box", desc: "CRUCIAL ! Sans ça, le padding s'ajoute à la width, et 33.33% + 20px de padding dépasse 100%. Avec box-sizing:border-box, le padding EST INCLUS dans la width.", ex: "/* Sans box-sizing : largeur réelle = 33.33% + 40px (padding) */\n/* Avec box-sizing:border-box : largeur réelle = 33.33% exactement */" },
+    { name: "max-width + margin:auto", desc: "Limite la largeur maximale du conteneur et le centre dans la page.", ex: ".conteneur {\n  max-width: 900px;\n  margin: 0 auto;\n}" },
+    { name: "overflow: hidden (clearfix)", desc: "Sur le conteneur parent (.rangee), empêche que sa hauteur soit 0 quand tous ses enfants flottent.", ex: ".rangee { overflow: hidden; }" },
+  ],
+  note: "⚠️ <strong>box-sizing: border-box</strong> est indispensable avec float + pourcentages. Beaucoup de développeurs l'ajoutent sur * (tous les éléments) dès le début.",
+  tip: "✅ Astuce : mets box-sizing:border-box sur tous les éléments en écrivant : * { box-sizing: border-box; }",
+},
+
+/* ── STEP 7 ── Footer */
+{
+  title: "Pied de page (Footer)",
+  subtitle: "Un footer structuré avec colonnes de liens et copyright. On consolide les techniques apprises.",
+  num: "ÉTAPE 8 / 10",
+  tags: ["footer", "float", "text-align", "border-top"],
+  html: `<span class="ht">&lt;footer</span> <span class="ha">class</span>=<span class="hv">"footer"</span><span class="ht">&gt;</span>
+
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"footer-contenu"</span><span class="ht">&gt;</span>
+
+    <span class="hc">&lt;!-- Colonne 1 : À propos --&gt;</span>
+    <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"footer-col"</span><span class="ht">&gt;</span>
+      <span class="ht">&lt;h4&gt;</span>MonSite<span class="ht">&lt;/h4&gt;</span>
+      <span class="ht">&lt;p&gt;</span>Votre partenaire
+      web depuis 2020.<span class="ht">&lt;/p&gt;</span>
+    <span class="ht">&lt;/div&gt;</span>
+
+    <span class="hc">&lt;!-- Colonne 2 : Liens --&gt;</span>
+    <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"footer-col"</span><span class="ht">&gt;</span>
+      <span class="ht">&lt;h4&gt;</span>Navigation<span class="ht">&lt;/h4&gt;</span>
+      <span class="ht">&lt;ul&gt;</span>
+        <span class="ht">&lt;li&gt;&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span><span class="ht">&gt;</span>Accueil<span class="ht">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="ht">&lt;li&gt;&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span><span class="ht">&gt;</span>Services<span class="ht">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="ht">&lt;li&gt;&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span><span class="ht">&gt;</span>Contact<span class="ht">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="ht">&lt;/ul&gt;</span>
+    <span class="ht">&lt;/div&gt;</span>
+
+    <span class="hc">&lt;!-- Colonne 3 : Contact --&gt;</span>
+    <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"footer-col"</span><span class="ht">&gt;</span>
+      <span class="ht">&lt;h4&gt;</span>Contact<span class="ht">&lt;/h4&gt;</span>
+      <span class="ht">&lt;p&gt;</span>contact@monsite.fr<span class="ht">&lt;/p&gt;</span>
+      <span class="ht">&lt;p&gt;</span>+33 1 23 45 67 89<span class="ht">&lt;/p&gt;</span>
+    <span class="ht">&lt;/div&gt;</span>
+
+  <span class="ht">&lt;/div&gt;</span>
+
+  <span class="hc">&lt;!-- Barre de copyright --&gt;</span>
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"footer-bas"</span><span class="ht">&gt;</span>
+    <span class="ht">&lt;p&gt;</span>© 2024 MonSite. Tous droits réservés.<span class="ht">&lt;/p&gt;</span>
+  <span class="ht">&lt;/div&gt;</span>
+
+<span class="ht">&lt;/footer&gt;</span>`,
+  css: `<span class="cs">.footer</span> <span class="cb">{</span>
+  <span class="cp">background-color</span>: <span class="cv">#111827</span>;
+  <span class="cp">color</span>: <span class="cv">#9ca3af</span>;
+  <span class="cp">font-family</span>: <span class="cv">Arial, sans-serif</span>;
+<span class="cb">}</span>
+
+<span class="cs">.footer-contenu</span> <span class="cb">{</span>
+  <span class="cp">max-width</span>: <span class="cv">900px</span>;
+  <span class="cp">margin</span>: <span class="cv">0 auto</span>;
+  <span class="cp">padding</span>: <span class="cv">40px 20px 20px</span>;
+  <span class="cp">overflow</span>: <span class="cv">hidden</span>;
+<span class="cb">}</span>
+
+<span class="cs">.footer-col</span> <span class="cb">{</span>
+  <span class="cp">float</span>: <span class="cv">left</span>;
+  <span class="cp">width</span>: <span class="cv">33.33%</span>;
+  <span class="cp">padding-right</span>: <span class="cv">30px</span>;
+  <span class="cp">box-sizing</span>: <span class="cv">border-box</span>;
+<span class="cb">}</span>
+
+<span class="cs">.footer-col h4</span> <span class="cb">{</span>
+  <span class="cp">color</span>: <span class="cv">#ffffff</span>;
+  <span class="cp">font-size</span>: <span class="cv">16px</span>;
+  <span class="cp">margin-bottom</span>: <span class="cv">15px</span>;
+  <span class="cp">padding-bottom</span>: <span class="cv">8px</span>;
+  <span class="cp">border-bottom</span>: <span class="cv">1px solid #374151</span>;
+<span class="cb">}</span>
+
+<span class="cs">.footer-col ul</span> <span class="cb">{</span>
+  <span class="cp">list-style</span>: <span class="cv">none</span>;
+  <span class="cp">padding</span>: <span class="cv">0</span>;
+<span class="cb">}</span>
+
+<span class="cs">.footer-col ul li</span> <span class="cb">{</span>
+  <span class="cp">margin-bottom</span>: <span class="cv">8px</span>;
+<span class="cb">}</span>
+
+<span class="cs">.footer-col a</span> <span class="cb">{</span>
+  <span class="cp">color</span>: <span class="cv">#9ca3af</span>;
+  <span class="cp">text-decoration</span>: <span class="cv">none</span>;
+<span class="cb">}</span>
+
+<span class="cs">.footer-col p</span> <span class="cb">{</span>
+  <span class="cp">font-size</span>: <span class="cv">14px</span>;
+  <span class="cp">line-height</span>: <span class="cv">1.7</span>;
+<span class="cb">}</span>
+
+<span class="cs">.footer-bas</span> <span class="cb">{</span>
+  <span class="cp">text-align</span>: <span class="cv">center</span>;
+  <span class="cp">padding</span>: <span class="cv">15px 20px</span>;
+  <span class="cp">border-top</span>: <span class="cv">1px solid #374151</span>;
+  <span class="cp">font-size</span>: <span class="cv">13px</span>;
+  <span class="cp">color</span>: <span class="cv">#6b7280</span>;
+<span class="cb">}</span>`,
+  preview: `<footer class="footer"><div class="footer-contenu"><div class="footer-col"><h4>MonSite</h4><p>Votre partenaire web depuis 2020.</p></div><div class="footer-col"><h4>Navigation</h4><ul><li><a href="#">Accueil</a></li><li><a href="#">Services</a></li><li><a href="#">Contact</a></li></ul></div><div class="footer-col"><h4>Contact</h4><p>contact@monsite.fr</p><p>+33 1 23 45 67 89</p></div></div><div class="footer-bas"><p>© 2024 MonSite. Tous droits réservés.</p></div></footer>`,
+  previewCSS: `.footer{background:#111827;color:#9ca3af;font-family:Arial,sans-serif;}.footer-contenu{max-width:900px;margin:0 auto;padding:40px 20px 20px;overflow:hidden;}.footer-col{float:left;width:33.33%;padding-right:30px;box-sizing:border-box;}.footer-col h4{color:#fff;font-size:16px;margin-bottom:15px;padding-bottom:8px;border-bottom:1px solid #374151;}.footer-col ul{list-style:none;padding:0;}.footer-col ul li{margin-bottom:8px;}.footer-col a{color:#9ca3af;text-decoration:none;}.footer-col p{font-size:14px;line-height:1.7;}.footer-bas{text-align:center;padding:15px 20px;border-top:1px solid #374151;font-size:13px;color:#6b7280;}`,
+  explain: [
+    { name: "border-top / border-bottom", desc: "Bordure sur un seul côté. Parfait pour les séparateurs visuels comme la ligne dans le footer ou sous les titres.", ex: "border-bottom: 1px solid #374151;\nborder-top: 2px solid #ff6f00;" },
+    { name: "padding-right", desc: "Espace uniquement à droite de l'élément. Utile pour créer un espace entre les colonnes.", ex: ".col { padding-right: 30px; }" },
+    { name: "font-size: 13px", desc: "Le texte de copyright est souvent plus petit (12-14px) pour indiquer son importance secondaire.", ex: ".copyright { font-size: 13px; color: #999; }" },
+  ],
+  note: "💡 On réutilise exactement la même technique float + 33.33% + box-sizing que pour les colonnes. Les patterns se répètent en CSS !",
+},
+
+/* ── STEP 8 ── Hover & Liens */
+{
+  title: "Liens actifs & effets hover",
+  subtitle: "Rendre les liens interactifs avec :hover, :visited, :active. Les pseudo-classes qui donnent vie aux éléments.",
+  num: "ÉTAPE 9 / 10",
+  tags: [":hover", ":active", ":visited", "transition", "cursor"],
+  html: `<span class="ht">&lt;body</span> <span class="ha">style</span>=<span class="hv">"padding:30px;font-family:Arial"</span><span class="ht">&gt;</span>
+
+  <span class="ht">&lt;h2&gt;</span>Exemples de liens<span class="ht">&lt;/h2&gt;</span>
+
+  <span class="ht">&lt;p&gt;</span>
+    Lien normal :
+    <span class="ht">&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span> <span class="ha">class</span>=<span class="hv">"lien-nav"</span><span class="ht">&gt;</span>
+      Survoler ce lien !
+    <span class="ht">&lt;/a&gt;</span>
+  <span class="ht">&lt;/p&gt;</span>
+
+  <span class="ht">&lt;br&gt;</span>
+
+  <span class="ht">&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span> <span class="ha">class</span>=<span class="hv">"btn-primary"</span><span class="ht">&gt;</span>
+    Bouton principal
+  <span class="ht">&lt;/a&gt;</span>
+
+  <span class="ht">&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span> <span class="ha">class</span>=<span class="hv">"btn-outline"</span><span class="ht">&gt;</span>
+    Bouton contour
+  <span class="ht">&lt;/a&gt;</span>
+
+  <span class="ht">&lt;br&gt;&lt;br&gt;</span>
+
+  <span class="ht">&lt;nav&gt;</span>
+    <span class="ht">&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span> <span class="ha">class</span>=<span class="hv">"lien-menu"</span><span class="ht">&gt;</span>Accueil<span class="ht">&lt;/a&gt;</span>
+    <span class="ht">&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span> <span class="ha">class</span>=<span class="hv">"lien-menu"</span><span class="ht">&gt;</span>Blog<span class="ht">&lt;/a&gt;</span>
+    <span class="ht">&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span> <span class="ha">class</span>=<span class="hv">"lien-menu"</span><span class="ht">&gt;</span>Contact<span class="ht">&lt;/a&gt;</span>
+  <span class="ht">&lt;/nav&gt;</span>
+
+<span class="ht">&lt;/body&gt;</span>`,
+  css: `<span class="cc">/* ── Lien de navigation simple ── */</span>
+<span class="cs">.lien-nav</span> <span class="cb">{</span>
+  <span class="cp">color</span>: <span class="cv">#1565c0</span>;
+  <span class="cp">text-decoration</span>: <span class="cv">none</span>;
+  <span class="cc">/* Transition douce sur tous les changements */</span>
+  <span class="cp">transition</span>: <span class="cv">color 0.3s</span>;
+<span class="cb">}</span>
+<span class="cc">/* Pseudo-classe :hover — survol de la souris */</span>
+<span class="cs">.lien-nav:hover</span> <span class="cb">{</span>
+  <span class="cp">color</span>: <span class="cv">#ff6f00</span>;
+  <span class="cp">text-decoration</span>: <span class="cv">underline</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Bouton principal ── */</span>
+<span class="cs">.btn-primary</span> <span class="cb">{</span>
+  <span class="cp">display</span>: <span class="cv">inline-block</span>;
+  <span class="cp">padding</span>: <span class="cv">12px 28px</span>;
+  <span class="cp">background-color</span>: <span class="cv">#1565c0</span>;
+  <span class="cp">color</span>: <span class="cv">white</span>;
+  <span class="cp">text-decoration</span>: <span class="cv">none</span>;
+  <span class="cp">border-radius</span>: <span class="cv">5px</span>;
+  <span class="cp">margin-right</span>: <span class="cv">10px</span>;
+  <span class="cp">transition</span>: <span class="cv">background-color 0.2s, transform 0.1s</span>;
+<span class="cb">}</span>
+<span class="cs">.btn-primary:hover</span> <span class="cb">{</span>
+  <span class="cp">background-color</span>: <span class="cv">#0d47a1</span>;
+<span class="cb">}</span>
+<span class="cs">.btn-primary:active</span> <span class="cb">{</span>
+  <span class="cc">/* S'applique au clic */</span>
+  <span class="cp">transform</span>: <span class="cv">scale(0.97)</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Bouton contour ── */</span>
+<span class="cs">.btn-outline</span> <span class="cb">{</span>
+  <span class="cp">display</span>: <span class="cv">inline-block</span>;
+  <span class="cp">padding</span>: <span class="cv">12px 28px</span>;
+  <span class="cp">background-color</span>: <span class="cv">transparent</span>;
+  <span class="cp">color</span>: <span class="cv">#1565c0</span>;
+  <span class="cp">border</span>: <span class="cv">2px solid #1565c0</span>;
+  <span class="cp">text-decoration</span>: <span class="cv">none</span>;
+  <span class="cp">border-radius</span>: <span class="cv">5px</span>;
+  <span class="cp">transition</span>: <span class="cv">all 0.25s</span>;
+<span class="cb">}</span>
+<span class="cs">.btn-outline:hover</span> <span class="cb">{</span>
+  <span class="cp">background-color</span>: <span class="cv">#1565c0</span>;
+  <span class="cp">color</span>: <span class="cv">white</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ── Liens de menu ── */</span>
+<span class="cs">.lien-menu</span> <span class="cb">{</span>
+  <span class="cp">display</span>: <span class="cv">inline-block</span>;
+  <span class="cp">padding</span>: <span class="cv">8px 16px</span>;
+  <span class="cp">color</span>: <span class="cv">#555</span>;
+  <span class="cp">text-decoration</span>: <span class="cv">none</span>;
+  <span class="cp">border-bottom</span>: <span class="cv">2px solid transparent</span>;
+  <span class="cp">transition</span>: <span class="cv">border-color 0.2s, color 0.2s</span>;
+<span class="cb">}</span>
+<span class="cs">.lien-menu:hover</span> <span class="cb">{</span>
+  <span class="cp">color</span>: <span class="cv">#1565c0</span>;
+  <span class="cp">border-bottom-color</span>: <span class="cv">#1565c0</span>;
+<span class="cb">}</span>`,
+  preview: `<h2>Exemples de liens</h2><p>Lien normal : <a href="#" class="lien-nav">Survoler ce lien !</a></p><br><a href="#" class="btn-primary">Bouton principal</a><a href="#" class="btn-outline">Bouton contour</a><br><br><nav><a href="#" class="lien-menu">Accueil</a><a href="#" class="lien-menu">Blog</a><a href="#" class="lien-menu">Contact</a></nav>`,
+  previewCSS: `body{padding:30px;font-family:Arial,sans-serif;}.lien-nav{color:#1565c0;text-decoration:none;transition:color .3s;}.lien-nav:hover{color:#ff6f00;text-decoration:underline;}.btn-primary{display:inline-block;padding:12px 28px;background:#1565c0;color:white;text-decoration:none;border-radius:5px;margin-right:10px;transition:background .2s,transform .1s;}.btn-primary:hover{background:#0d47a1;}.btn-primary:active{transform:scale(0.97);}.btn-outline{display:inline-block;padding:12px 28px;background:transparent;color:#1565c0;border:2px solid #1565c0;text-decoration:none;border-radius:5px;transition:all .25s;}.btn-outline:hover{background:#1565c0;color:white;}.lien-menu{display:inline-block;padding:8px 16px;color:#555;text-decoration:none;border-bottom:2px solid transparent;transition:border-color .2s,color .2s;}.lien-menu:hover{color:#1565c0;border-bottom-color:#1565c0;}`,
+  explain: [
+    { name: ":hover", desc: "Pseudo-classe activée quand la souris survole l'élément. Ne s'applique pas sur mobile (pas de souris).", ex: ".bouton:hover {\n  background-color: darkblue;\n}" },
+    { name: ":active", desc: "Pseudo-classe activée pendant le clic (le moment où le bouton est enfoncé).", ex: ".bouton:active {\n  transform: scale(0.95);\n}" },
+    { name: ":visited", desc: "Style d'un lien déjà visité. Par défaut les liens visités deviennent violets.", ex: "a:visited {\n  color: purple;\n}" },
+    { name: "transition", desc: "Anime le changement entre deux états CSS. Syntaxe : propriété | durée | timing-function.", ex: "transition: color 0.3s ease;\ntransition: all 0.25s;\ntransition: background 0.2s, transform 0.1s;" },
+    { name: "transform: scale()", desc: "Agrandit ou réduit l'élément. scale(0.97) = légèrement réduit, donne un effet de 'pression' au clic.", ex: ".btn:active {\n  transform: scale(0.97);\n}" },
+    { name: "cursor: pointer", desc: "Change le curseur de la souris en main quand on survole. Signale visuellement que l'élément est cliquable.", ex: ".bouton { cursor: pointer; }" },
+  ],
+  note: "💡 <strong>L'ordre des pseudo-classes</strong> compte : LoVe-HA → :link → :visited → :hover → :active. Cet ordre évite les conflits.",
+  tip: "✅ La transition doit être sur l'élément de base (pas sur :hover) pour que l'animation fonctionne dans LES DEUX SENS (entrée ET sortie du survol).",
+},
+
+/* ── STEP 9 ── Site complet */
+{
+  title: "🏆 Site complet assemblé !",
+  subtitle: "Toutes les étapes réunies : navbar, hero, colonnes de services, footer. Voici le résultat final de tout ce qu'on a appris !",
+  num: "ÉTAPE 10 / 10",
+  tags: ["navbar", "hero", "services", "footer", "hover", "float"],
+  html: `<span class="hc">&lt;!DOCTYPE html&gt;</span>
+<span class="ht">&lt;html</span> <span class="ha">lang</span>=<span class="hv">"fr"</span><span class="ht">&gt;</span>
+<span class="ht">&lt;head&gt;</span>
+  <span class="ht">&lt;meta</span> <span class="ha">charset</span>=<span class="hv">"UTF-8"</span><span class="ht">&gt;</span>
+  <span class="ht">&lt;title&gt;</span>MonSite<span class="ht">&lt;/title&gt;</span>
+  <span class="ht">&lt;link</span> <span class="ha">rel</span>=<span class="hv">"stylesheet"</span>
+        <span class="ha">href</span>=<span class="hv">"style.css"</span><span class="ht">&gt;</span>
+<span class="ht">&lt;/head&gt;</span>
+<span class="ht">&lt;body&gt;</span>
+
+<span class="hc">&lt;!-- 1. NAVBAR --&gt;</span>
+<span class="ht">&lt;nav</span> <span class="ha">class</span>=<span class="hv">"navbar"</span><span class="ht">&gt;</span>
+  <span class="ht">&lt;div</span> <span class="ha">id</span>=<span class="hv">"logo"</span><span class="ht">&gt;</span>MonSite<span class="ht">&lt;/div&gt;</span>
+  <span class="ht">&lt;ul</span> <span class="ha">id</span>=<span class="hv">"nav-liens"</span><span class="ht">&gt;</span>
+    <span class="ht">&lt;li&gt;&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span><span class="ht">&gt;</span>Accueil<span class="ht">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="ht">&lt;li&gt;&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span><span class="ht">&gt;</span>Services<span class="ht">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="ht">&lt;li&gt;&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span><span class="ht">&gt;</span>Contact<span class="ht">&lt;/a&gt;&lt;/li&gt;</span>
+  <span class="ht">&lt;/ul&gt;</span>
+<span class="ht">&lt;/nav&gt;</span>
+
+<span class="hc">&lt;!-- 2. HERO --&gt;</span>
+<span class="ht">&lt;section</span> <span class="ha">class</span>=<span class="hv">"hero"</span><span class="ht">&gt;</span>
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"hero-contenu"</span><span class="ht">&gt;</span>
+    <span class="ht">&lt;h1&gt;</span>Bienvenue sur MonSite<span class="ht">&lt;/h1&gt;</span>
+    <span class="ht">&lt;p&gt;</span>Nous créons des sites modernes.<span class="ht">&lt;/p&gt;</span>
+    <span class="ht">&lt;a</span> <span class="ha">href</span>=<span class="hv">"#"</span> <span class="ha">class</span>=<span class="hv">"btn-hero"</span><span class="ht">&gt;</span>Découvrir<span class="ht">&lt;/a&gt;</span>
+  <span class="ht">&lt;/div&gt;</span>
+<span class="ht">&lt;/section&gt;</span>
+
+<span class="hc">&lt;!-- 3. SERVICES (3 colonnes) --&gt;</span>
+<span class="ht">&lt;section</span> <span class="ha">class</span>=<span class="hv">"services"</span><span class="ht">&gt;</span>
+  <span class="ht">&lt;h2&gt;</span>Nos services<span class="ht">&lt;/h2&gt;</span>
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"rangee"</span><span class="ht">&gt;</span>
+    <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"col"</span><span class="ht">&gt;</span>
+      <span class="ht">&lt;h3&gt;</span>🎨 Design<span class="ht">&lt;/h3&gt;</span>
+      <span class="ht">&lt;p&gt;</span>Interfaces modernes.<span class="ht">&lt;/p&gt;</span>
+    <span class="ht">&lt;/div&gt;</span>
+    <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"col"</span><span class="ht">&gt;</span>
+      <span class="ht">&lt;h3&gt;</span>⚙️ Dev<span class="ht">&lt;/h3&gt;</span>
+      <span class="ht">&lt;p&gt;</span>Code de qualité.<span class="ht">&lt;/p&gt;</span>
+    <span class="ht">&lt;/div&gt;</span>
+    <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"col"</span><span class="ht">&gt;</span>
+      <span class="ht">&lt;h3&gt;</span>📈 SEO<span class="ht">&lt;/h3&gt;</span>
+      <span class="ht">&lt;p&gt;</span>Visibilité optimale.<span class="ht">&lt;/p&gt;</span>
+    <span class="ht">&lt;/div&gt;</span>
+  <span class="ht">&lt;/div&gt;</span>
+<span class="ht">&lt;/section&gt;</span>
+
+<span class="hc">&lt;!-- 4. FOOTER --&gt;</span>
+<span class="ht">&lt;footer</span> <span class="ha">class</span>=<span class="hv">"footer"</span><span class="ht">&gt;</span>
+  <span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"footer-inner"</span><span class="ht">&gt;</span>
+    <span class="ht">&lt;p&gt;</span>© 2024 MonSite<span class="ht">&lt;/p&gt;</span>
+  <span class="ht">&lt;/div&gt;</span>
+<span class="ht">&lt;/footer&gt;</span>
+
+<span class="ht">&lt;/body&gt;</span>
+<span class="ht">&lt;/html&gt;</span>`,
+  css: `<span class="cc">/* ===== RESET ===== */</span>
+<span class="cs">*</span> <span class="cb">{</span> <span class="cp">box-sizing</span>: <span class="cv">border-box</span>; <span class="cp">margin</span>: <span class="cv">0</span>; <span class="cp">padding</span>: <span class="cv">0</span>; <span class="cb">}</span>
+<span class="cs">body</span> <span class="cb">{</span> <span class="cp">font-family</span>: <span class="cv">Arial, sans-serif</span>; <span class="cb">}</span>
+
+<span class="cc">/* ===== NAVBAR ===== */</span>
+<span class="cs">.navbar</span> <span class="cb">{</span>
+  <span class="cp">background-color</span>: <span class="cv">#1a237e</span>;
+  <span class="cp">height</span>: <span class="cv">65px</span>;
+  <span class="cp">padding</span>: <span class="cv">0 40px</span>;
+  <span class="cp">overflow</span>: <span class="cv">hidden</span>;
+<span class="cb">}</span>
+<span class="cs">#logo</span> <span class="cb">{</span>
+  <span class="cp">float</span>: <span class="cv">left</span>;
+  <span class="cp">color</span>: <span class="cv">white</span>;
+  <span class="cp">font-size</span>: <span class="cv">22px</span>;
+  <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+  <span class="cp">line-height</span>: <span class="cv">65px</span>;
+<span class="cb">}</span>
+<span class="cs">#nav-liens</span> <span class="cb">{</span>
+  <span class="cp">float</span>: <span class="cv">right</span>;
+  <span class="cp">list-style</span>: <span class="cv">none</span>;
+  <span class="cp">line-height</span>: <span class="cv">65px</span>;
+<span class="cb">}</span>
+<span class="cs">#nav-liens li</span> <span class="cb">{</span> <span class="cp">display</span>: <span class="cv">inline-block</span>; <span class="cb">}</span>
+<span class="cs">#nav-liens a</span> <span class="cb">{</span>
+  <span class="cp">color</span>: <span class="cv">#b3c5ff</span>;
+  <span class="cp">text-decoration</span>: <span class="cv">none</span>;
+  <span class="cp">padding</span>: <span class="cv">0 15px</span>;
+  <span class="cp">transition</span>: <span class="cv">color 0.2s</span>;
+<span class="cb">}</span>
+<span class="cs">#nav-liens a:hover</span> <span class="cb">{</span> <span class="cp">color</span>: <span class="cv">white</span>; <span class="cb">}</span>
+
+<span class="cc">/* ===== HERO ===== */</span>
+<span class="cs">.hero</span> <span class="cb">{</span>
+  <span class="cp">height</span>: <span class="cv">380px</span>;
+  <span class="cp">background-image</span>: <span class="cv">url('https://picsum.photos/1200/400?random=42')</span>;
+  <span class="cp">background-size</span>: <span class="cv">cover</span>;
+  <span class="cp">background-position</span>: <span class="cv">center</span>;
+  <span class="cp">position</span>: <span class="cv">relative</span>;
+<span class="cb">}</span>
+<span class="cs">.hero::before</span> <span class="cb">{</span>
+  <span class="cp">content</span>: <span class="cv">''</span>;
+  <span class="cp">position</span>: <span class="cv">absolute</span>;
+  <span class="cp">top</span>:<span class="cv">0</span>;<span class="cp">left</span>:<span class="cv">0</span>;<span class="cp">width</span>:<span class="cv">100%</span>;<span class="cp">height</span>:<span class="cv">100%</span>;
+  <span class="cp">background</span>: <span class="cv">rgba(0,0,0,0.5)</span>;
+<span class="cb">}</span>
+<span class="cs">.hero-contenu</span> <span class="cb">{</span>
+  <span class="cp">position</span>: <span class="cv">relative</span>;
+  <span class="cp">text-align</span>: <span class="cv">center</span>;
+  <span class="cp">padding-top</span>: <span class="cv">90px</span>;
+  <span class="cp">color</span>: <span class="cv">white</span>;
+<span class="cb">}</span>
+<span class="cs">.hero-contenu h1</span> <span class="cb">{</span>
+  <span class="cp">font-size</span>: <span class="cv">40px</span>;
+  <span class="cp">margin-bottom</span>: <span class="cv">15px</span>;
+<span class="cb">}</span>
+<span class="cs">.hero-contenu p</span> <span class="cb">{</span>
+  <span class="cp">font-size</span>: <span class="cv">18px</span>;
+  <span class="cp">margin-bottom</span>: <span class="cv">25px</span>;
+<span class="cb">}</span>
+<span class="cs">.btn-hero</span> <span class="cb">{</span>
+  <span class="cp">display</span>: <span class="cv">inline-block</span>;
+  <span class="cp">padding</span>: <span class="cv">13px 35px</span>;
+  <span class="cp">background-color</span>: <span class="cv">#ff6f00</span>;
+  <span class="cp">color</span>: <span class="cv">white</span>;
+  <span class="cp">text-decoration</span>: <span class="cv">none</span>;
+  <span class="cp">border-radius</span>: <span class="cv">5px</span>;
+  <span class="cp">font-size</span>: <span class="cv">16px</span>;
+  <span class="cp">transition</span>: <span class="cv">background 0.2s</span>;
+<span class="cb">}</span>
+<span class="cs">.btn-hero:hover</span> <span class="cb">{</span> <span class="cp">background-color</span>: <span class="cv">#e65100</span>; <span class="cb">}</span>
+
+<span class="cc">/* ===== SERVICES ===== */</span>
+<span class="cs">.services</span> <span class="cb">{</span>
+  <span class="cp">padding</span>: <span class="cv">50px 40px</span>;
+  <span class="cp">background-color</span>: <span class="cv">#f5f5f5</span>;
+<span class="cb">}</span>
+<span class="cs">.services h2</span> <span class="cb">{</span>
+  <span class="cp">text-align</span>: <span class="cv">center</span>;
+  <span class="cp">color</span>: <span class="cv">#1a237e</span>;
+  <span class="cp">margin-bottom</span>: <span class="cv">30px</span>;
+  <span class="cp">font-size</span>: <span class="cv">28px</span>;
+<span class="cb">}</span>
+<span class="cs">.rangee</span> <span class="cb">{</span>
+  <span class="cp">max-width</span>: <span class="cv">900px</span>;
+  <span class="cp">margin</span>: <span class="cv">0 auto</span>;
+  <span class="cp">overflow</span>: <span class="cv">hidden</span>;
+<span class="cb">}</span>
+<span class="cs">.col</span> <span class="cb">{</span>
+  <span class="cp">float</span>: <span class="cv">left</span>;
+  <span class="cp">width</span>: <span class="cv">33.33%</span>;
+  <span class="cp">padding</span>: <span class="cv">25px 20px</span>;
+  <span class="cp">text-align</span>: <span class="cv">center</span>;
+  <span class="cp">background-color</span>: <span class="cv">white</span>;
+  <span class="cp">border</span>: <span class="cv">1px solid #e0e0e0</span>;
+  <span class="cp">transition</span>: <span class="cv">box-shadow 0.2s</span>;
+<span class="cb">}</span>
+<span class="cs">.col:hover</span> <span class="cb">{</span>
+  <span class="cp">box-shadow</span>: <span class="cv">0 5px 20px rgba(0,0,0,0.1)</span>;
+<span class="cb">}</span>
+
+<span class="cc">/* ===== FOOTER ===== */</span>
+<span class="cs">.footer</span> <span class="cb">{</span>
+  <span class="cp">background-color</span>: <span class="cv">#111827</span>;
+  <span class="cp">color</span>: <span class="cv">#6b7280</span>;
+  <span class="cp">text-align</span>: <span class="cv">center</span>;
+  <span class="cp">padding</span>: <span class="cv">20px</span>;
+  <span class="cp">font-size</span>: <span class="cv">14px</span>;
+  <span class="cp">border-top</span>: <span class="cv">3px solid #1a237e</span>;
+<span class="cb">}</span>`,
+  preview: `<nav class="navbar"><div id="logo">MonSite</div><ul id="nav-liens"><li><a href="#">Accueil</a></li><li><a href="#">Services</a></li><li><a href="#">Contact</a></li></ul></nav><section class="hero"><div class="hero-contenu"><h1>Bienvenue sur MonSite</h1><p>Nous créons des sites modernes.</p><a href="#" class="btn-hero">Découvrir</a></div></section><section class="services"><h2>Nos services</h2><div class="rangee"><div class="col"><h3>🎨 Design</h3><p>Interfaces modernes.</p></div><div class="col"><h3>⚙️ Dev</h3><p>Code de qualité.</p></div><div class="col"><h3>📈 SEO</h3><p>Visibilité optimale.</p></div></div></section><footer class="footer"><p>© 2024 MonSite</p></footer>`,
+  previewCSS: `*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;}.navbar{background:#1a237e;height:65px;padding:0 40px;overflow:hidden;}#logo{float:left;color:white;font-size:22px;font-weight:bold;line-height:65px;}#nav-liens{float:right;list-style:none;line-height:65px;}#nav-liens li{display:inline-block;}#nav-liens a{color:#b3c5ff;text-decoration:none;padding:0 15px;transition:color .2s;}#nav-liens a:hover{color:white;}.hero{height:380px;background-image:url('https://picsum.photos/1200/400?random=42');background-size:cover;background-position:center;position:relative;}.hero::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);}.hero-contenu{position:relative;text-align:center;padding-top:90px;color:white;}.hero-contenu h1{font-size:40px;margin-bottom:15px;}.hero-contenu p{font-size:18px;margin-bottom:25px;}.btn-hero{display:inline-block;padding:13px 35px;background:#ff6f00;color:white;text-decoration:none;border-radius:5px;font-size:16px;transition:background .2s;}.btn-hero:hover{background:#e65100;}.services{padding:50px 40px;background:#f5f5f5;}.services h2{text-align:center;color:#1a237e;margin-bottom:30px;font-size:28px;}.rangee{max-width:900px;margin:0 auto;overflow:hidden;}.col{float:left;width:33.33%;padding:25px 20px;text-align:center;background:white;border:1px solid #e0e0e0;transition:box-shadow .2s;}.col:hover{box-shadow:0 5px 20px rgba(0,0,0,0.1);}.footer{background:#111827;color:#6b7280;text-align:center;padding:20px;font-size:14px;border-top:3px solid #1a237e;}`,
+  explain: [
+    { name: "* { box-sizing: border-box }", desc: "Reset universel : applique box-sizing à TOUS les éléments. C'est la première chose à écrire dans tout projet CSS moderne.", ex: "* {\n  box-sizing: border-box;\n  margin: 0;\n  padding: 0;\n}" },
+    { name: "Récapitulatif float", desc: "Logo → float:left | Liens → float:right | Conteneur → overflow:hidden | Colonnes → float:left + width:33.33%", ex: "/* Pattern colonnes */\n.conteneur { overflow: hidden; }\n.colonne { float: left; width: 33.33%; }" },
+    { name: "Récapitulatif background", desc: "background-image + background-size:cover + background-position:center = section hero parfaite.", ex: ".hero {\n  background-image: url(...);\n  background-size: cover;\n  background-position: center;\n}" },
+    { name: "Récapitulatif hover", desc: ":hover sur les liens + transition sur l'élément de base = interactions fluides.", ex: ".lien { transition: color 0.2s; }\n.lien:hover { color: orange; }" },
+  ],
+  note: "🏆 <strong>Félicitations !</strong> Tu as maîtrisé les fondamentaux du CSS sans Flexbox. La prochaine étape : apprendre Flexbox qui rend tout ça encore plus simple !",
+  tip: "✅ <strong>Pour aller plus loin :</strong> media queries (@media) pour le responsive, Flexbox et CSS Grid pour des mises en page avancées.",
+},
+];
+
+/* ===========================================================
+   RENDU DES ÉTAPES
+=========================================================== */
+let currentStep = 0;
+
+function renderStep(i) {
+  const s = steps[i];
+  const main = document.getElementById('main-content');
+
+  const htmlId = `step-html-${i}`;
+  const cssId  = `step-css-${i}`;
+  const prevId = `step-prev-${i}`;
+  const explId = `step-expl-${i}`;
+
+  let propsHtml = '';
+  (s.explain || []).forEach(p => {
+    propsHtml += `
+      <div class="prop-card">
+        <div class="prop-card-name">${p.name}</div>
+        <div class="prop-card-desc">${p.desc}</div>
+        <div class="prop-card-example">${p.ex.replace(/\n/g,'<br>')}</div>
+      </div>`;
+  });
+
+  const noteHtml = s.note ? `<div class="explain-note">${s.note}</div>` : '';
+  const tipHtml  = s.tip  ? `<div class="explain-tip">✅ ${s.tip.replace('✅ ','')}</div>` : '';
+
+  let tagsHtml = '';
+  (s.tags || []).forEach(t => {
+    const cls = t.startsWith('font')||t.startsWith('color')||t.startsWith('text')||t.startsWith('background')||t.startsWith('border')||t.startsWith('margin')||t.startsWith('padding')||t.startsWith('width')||t.startsWith('height')||t.startsWith('list')||t.startsWith('display')||t.startsWith('float')||t.startsWith('overflow')||t.startsWith('box')||t.startsWith('position')||t.startsWith('transition')||t.startsWith('transform')||t.startsWith('cursor')||t.startsWith(':') ? 'tag-css' : t==='html'||t==='head'||t==='body'||t==='doctype'||t==='navbar'||t==='hero'||t==='services'||t==='footer' ? 'tag-html' : 'tag-prop';
+    tagsHtml += `<span class="tag ${cls}">${t}</span>`;
+  });
+
+  const page = document.createElement('div');
+  page.className = 'step-page' + (i === 0 ? ' visible' : '');
+  page.id = `step-${i}`;
+  page.innerHTML = `
+    <div class="step-banner">
+      <div class="step-number-big">${s.num}</div>
+      <h1>${s.title}</h1>
+      <p>${s.subtitle}</p>
+      <div class="step-tags">${tagsHtml}</div>
+    </div>
+
+    <div class="split-workspace">
+      <!-- tabs gauche -->
+      <div class="panel-tabs">
+        <div class="ptab active-html" id="tab-html-${i}" onclick="switchPanel(${i},'html')">index.html</div>
+        <div class="ptab" id="tab-css-${i}" onclick="switchPanel(${i},'css')">style.css</div>
+      </div>
+      <!-- tabs droite -->
+      <div class="preview-tabs">
+        <div class="ptab active-prev" id="tab-prev-${i}" onclick="switchRight(${i},'prev')">▶ Rendu</div>
+        <div class="ptab" id="tab-expl-${i}" onclick="switchRight(${i},'expl')">📖 Explications</div>
+      </div>
+
+      <!-- panel HTML -->
+      <div class="code-panel visible" id="${htmlId}">
+        <pre>${s.html}</pre>
+      </div>
+      <!-- panel CSS -->
+      <div class="code-panel" id="${cssId}">
+        <pre>${s.css}</pre>
+      </div>
+      <!-- preview -->
+      <div class="preview-panel visible" id="${prevId}">
+        <div class="preview-frame-wrap">
+          <iframe id="iframe-${i}" srcdoc=""></iframe>
+        </div>
+      </div>
+      <!-- explanations -->
+      <div class="explain-panel" id="${explId}">
+        <h3>📖 Propriétés expliquées</h3>
+        ${noteHtml}
+        ${tipHtml}
+        ${propsHtml}
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <span class="step-info-txt">${s.num} — ${s.title}</span>
+      <div class="nav-btns">
+        ${i > 0 ? `<button class="btn btn-prev" onclick="goTo(${i-1})">← Précédent</button>` : ''}
+        ${i < steps.length-1 ? `<button class="btn btn-next" onclick="goTo(${i+1})">Suivant →</button>` : '<button class="btn btn-next" style="background:var(--green);color:#0a1a0a">🏆 Terminé !</button>'}
+      </div>
+    </div>
+  `;
+
+  main.appendChild(page);
+
+  // inject iframe
+  setTimeout(() => {
+    const iframe = document.getElementById(`iframe-${i}`);
+    if (iframe) {
+      iframe.srcdoc = `<!DOCTYPE html><html><head><style>${s.previewCSS}</style></head><body>${s.preview}</body></html>`;
+    }
+  }, 80);
+}
+
+/* Render all steps */
+steps.forEach((_, i) => renderStep(i));
+
+/* Build header dots */
+const dotsContainer = document.getElementById('header-dots');
+steps.forEach((s, i) => {
+  const d = document.createElement('div');
+  d.className = 'step-dot' + (i === 0 ? ' active' : '');
+  d.textContent = i + 1;
+  d.title = s.title;
+  d.onclick = () => goTo(i);
+  d.id = `dot-${i}`;
+  dotsContainer.appendChild(d);
+});
+
+/* ===========================================================
+   NAVIGATION
+=========================================================== */
+function goTo(i) {
+  // hide current, mark done
+  document.getElementById(`step-${currentStep}`).classList.remove('visible');
+  document.getElementById(`dot-${currentStep}`).classList.remove('active');
+  document.getElementById(`dot-${currentStep}`).classList.add('done');
+  document.getElementById(`nav${currentStep}`).classList.remove('active');
+  document.getElementById(`nav${currentStep}`).classList.add('done');
+
+  // show new
+  currentStep = i;
+  document.getElementById(`step-${i}`).classList.add('visible');
+  document.getElementById(`dot-${i}`).classList.remove('done');
+  document.getElementById(`dot-${i}`).classList.add('active');
+  document.getElementById(`nav${i}`).classList.remove('done');
+  document.getElementById(`nav${i}`).classList.add('active');
+
+  // scroll top
+  document.getElementById('main-content').scrollTop = 0;
+  window.scrollTo(0,0);
+}
+
+/* ===========================================================
+   PANEL SWITCHES
+=========================================================== */
+function switchPanel(i, which) {
+  document.getElementById(`step-html-${i}`).classList.remove('visible');
+  document.getElementById(`step-css-${i}`).classList.remove('visible');
+  document.getElementById(`tab-html-${i}`).className = 'ptab';
+  document.getElementById(`tab-css-${i}`).className = 'ptab';
+
+  if (which === 'html') {
+    document.getElementById(`step-html-${i}`).classList.add('visible');
+    document.getElementById(`tab-html-${i}`).className = 'ptab active-html';
+  } else {
+    document.getElementById(`step-css-${i}`).classList.add('visible');
+    document.getElementById(`tab-css-${i}`).className = 'ptab active-css';
+  }
+}
+
+function switchRight(i, which) {
+  document.getElementById(`step-prev-${i}`).classList.remove('visible');
+  document.getElementById(`step-expl-${i}`).classList.remove('visible');
+  document.getElementById(`tab-prev-${i}`).className = 'ptab';
+  document.getElementById(`tab-expl-${i}`).className = 'ptab';
+
+  if (which === 'prev') {
+    document.getElementById(`step-prev-${i}`).classList.add('visible');
+    document.getElementById(`tab-prev-${i}`).className = 'ptab active-prev';
+  } else {
+    document.getElementById(`step-expl-${i}`).classList.add('visible');
+    document.getElementById(`tab-expl-${i}`).className = 'ptab active-expl';
+  }
+}
+</script>
+</body>
+</html>
